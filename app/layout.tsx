@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
+import ServiceWorkerRegister from "./ServiceWorkerRegister";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -11,6 +12,8 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "4Yos Veterinary Care",
   description: "Sistem Manajemen Persediaan PWA dengan EOQ dan ROP",
+  manifest: "/manifest.webmanifest",
+  themeColor: "#11df86",
 };
 
 export default function RootLayout({
@@ -20,7 +23,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="id">
-      <body className={`${poppins.className} antialiased`}>{children}</body>
+      <body className={`${poppins.className} antialiased`}>
+        <ServiceWorkerRegister />
+        {children}
+      </body>
     </html>
   );
 }
