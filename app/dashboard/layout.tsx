@@ -1,12 +1,38 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { getSession, logout } from "@/app/controller/auth.controller";
 import type { UserSession } from "@/app/model/user.model";
 import Sidebar, { NavId } from "@/app/components/dashboard/Sidebar";
 import Navbar from "@/app/components/dashboard/Navbar";
 import DashboardFooter from "@/app/components/dashboard/DashboardFooter";
+
+const PATH_MAP: Record<string, NavId> = {
+  "/dashboard": "dashboard",
+  "/dashboard/data-akun": "akun",
+  "/dashboard/data-supplier": "supplier",
+  "/dashboard/data-kategori": "kategori",
+  "/dashboard/data-produk": "produk",
+  "/dashboard/barang-masuk": "barang-masuk",
+  "/dashboard/barang-keluar": "barang-keluar",
+  "/dashboard/stok": "stok",
+  "/dashboard/analisis": "analisis",
+  "/dashboard/laporan": "laporan",
+};
+
+const NAV_PATH: Record<NavId, string> = {
+  dashboard: "/dashboard",
+  akun: "/dashboard/data-akun",
+  supplier: "/dashboard/data-supplier",
+  kategori: "/dashboard/data-kategori",
+  produk: "/dashboard/data-produk",
+  "barang-masuk": "/dashboard/barang-masuk",
+  "barang-keluar": "/dashboard/barang-keluar",
+  stok: "/dashboard/stok",
+  analisis: "/dashboard/analisis",
+  laporan: "/dashboard/laporan",
+};
 
 export default function DashboardLayout({
   children,
@@ -14,11 +40,13 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
+  const pathname = usePathname();
   const [session, setSession] = useState<UserSession | null>(null);
   const [checked, setChecked] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [active, setActive] = useState<NavId>("dashboard");
+
+  const active: NavId = PATH_MAP[pathname] ?? "dashboard";
 
   useEffect(() => {
     const s = getSession();
@@ -35,9 +63,17 @@ export default function DashboardLayout({
     router.replace("/login");
   }
 
+  function handleSelect(id: NavId) {
+    router.push(NAV_PATH[id]);
+    setMobileOpen(false);
+  }
+
   function handleToggle() {
-    setCollapsed((c) => !c);
-    setMobileOpen((o) => !o);
+    if (window.innerWidth < 1024) {
+      setMobileOpen((o) => !o);
+    } else {
+      setCollapsed((c) => !c);
+    }
   }
 
   if (!checked) {
@@ -68,7 +104,7 @@ export default function DashboardLayout({
           collapsed={false}
           mobile
           session={session}
-          onSelect={setActive}
+          onSelect={handleSelect}
           onClose={() => setMobileOpen(false)}
           onLogout={handleLogout}
         />
@@ -80,7 +116,7 @@ export default function DashboardLayout({
           active={active}
           collapsed={collapsed}
           session={session}
-          onSelect={setActive}
+          onSelect={handleSelect}
           onLogout={handleLogout}
         />
       </aside>

@@ -133,9 +133,9 @@ export default function HeroSection() {
           <div className="absolute -top-3 -right-3 bg-green-600 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-lg">
             Terpercaya di Padang ⭐
           </div>
-          <div className="absolute -bottom-3 -left-3 bg-white border border-gray-200 text-gray-800 text-xs font-bold px-4 py-2 rounded-xl shadow-lg">
+          {/* <div className="absolute -bottom-3 -left-3 bg-white border border-gray-200 text-gray-800 text-xs font-bold px-4 py-2 rounded-xl shadow-lg">
             📞 +62 822-8631-6881
-          </div>
+          </div> */}
         </div>
       </div>
     </section>

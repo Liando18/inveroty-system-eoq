@@ -1,5 +1,11 @@
 import Link from "next/link";
 
+function formatTanggal() {
+  return new Date().toLocaleDateString("id-ID", {
+    year: "numeric",
+  });
+}
+
 export default function Footer() {
   return (
     <footer className="bg-green-900 pt-14 pb-8 px-5 sm:px-8">
@@ -55,7 +61,7 @@ export default function Footer() {
         </div>
         <div className="pt-6 flex flex-col sm:flex-row justify-between items-center gap-2">
           <p className="text-xs text-white/20">
-            © 2025 4Yos Veterinary Care. All rights reserved.
+            © {formatTanggal()} 4Yos Veterinary Care. All rights reserved.
           </p>
           <p className="text-xs text-white/20">PWA · EOQ & ROP System</p>
         </div>

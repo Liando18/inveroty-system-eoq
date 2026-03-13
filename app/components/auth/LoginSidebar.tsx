@@ -2,6 +2,12 @@
 
 import Link from "next/link";
 
+function formatTanggal() {
+  return new Date().toLocaleDateString("id-ID", {
+    year: "numeric",
+  });
+}
+
 export default function LoginSidebar() {
   return (
     <div className="hidden lg:flex lg:w-[46%] xl:w-[42%] shrink-0 bg-green-900 flex-col justify-between p-12 relative overflow-hidden">
@@ -82,7 +88,7 @@ export default function LoginSidebar() {
       </div>
 
       <p className="relative z-10 text-xs text-white/20">
-        © 2025 4Yos Veterinary Care. All rights reserved.
+        © {formatTanggal()} 4Yos Veterinary Care. All rights reserved.
       </p>
     </div>
   );
