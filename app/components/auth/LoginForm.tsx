@@ -3,11 +3,13 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { login } from "@/app/controller/auth.controller";
 
 export default function LoginForm() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
   const [showPw, setShowPw] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -19,8 +21,12 @@ export default function LoginForm() {
       return;
     }
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 1100));
+    const result = await login({ email, password }, rememberMe);
     setLoading(false);
+    if (!result.success) {
+      setError(result.message);
+      return;
+    }
     router.push("/dashboard");
   }
 
@@ -114,7 +120,7 @@ export default function LoginForm() {
                 </div>
                 <input
                   type="email"
-                  placeholder="admin@4yos-vet.com"
+                  placeholder="email@domain.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleLogin()}
@@ -161,26 +167,27 @@ export default function LoginForm() {
               <label className="flex items-center gap-2.5 cursor-pointer">
                 <input
                   type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
                   className="w-4 h-4 rounded accent-green-600"
                 />
                 <span className="text-sm text-gray-600">Ingat saya</span>
               </label>
-              <a
-                href="#"
+              <Link
+                href="/login/lupa-password"
                 className="text-sm font-semibold text-green-600 hover:text-green-800 transition-colors">
                 Lupa password?
-              </a>
+              </Link>
             </div>
 
             <button
               onClick={handleLogin}
               disabled={loading}
-              className={`w-full py-3.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2.5 transition-all duration-200
-                ${
-                  loading
-                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                    : "bg-green-600 text-white shadow-lg shadow-green-200 hover:bg-green-700 hover:-translate-y-0.5 active:translate-y-0"
-                }`}>
+              className={`w-full py-3.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2.5 transition-all duration-200 ${
+                loading
+                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                  : "bg-green-600 text-white shadow-lg shadow-green-200 hover:bg-green-700 hover:-translate-y-0.5 active:translate-y-0"
+              }`}>
               {loading ? (
                 <>
                   <span className="w-4 h-4 border-2 border-gray-300 border-t-transparent rounded-full animate-spin" />
@@ -205,35 +212,7 @@ export default function LoginForm() {
             </button>
           </div>
 
-          <div className="mt-6 p-4 bg-green-50 border border-green-100 rounded-2xl">
-            <p className="text-xs font-bold text-green-700 flex items-center gap-2 mb-2">
-              <svg
-                className="w-3.5 h-3.5"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round">
-                <circle cx="12" cy="12" r="10" />
-                <line x1="12" y1="8" x2="12" y2="12" />
-                <line x1="12" y1="16" x2="12.01" y2="16" />
-              </svg>
-              Akses Demo
-            </p>
-            <div className="grid grid-cols-2 gap-2 text-xs text-gray-600">
-              <div className="bg-white rounded-lg px-3 py-2 border border-green-100">
-                <p className="text-[10px] text-gray-400 mb-0.5">Email</p>
-                <p className="font-bold text-gray-800">admin@4yos-vet.com</p>
-              </div>
-              <div className="bg-white rounded-lg px-3 py-2 border border-green-100">
-                <p className="text-[10px] text-gray-400 mb-0.5">Password</p>
-                <p className="font-bold text-gray-800">admin123</p>
-              </div>
-            </div>
-          </div>
-
-          <p className="text-center mt-6 text-sm text-gray-400">
+          <p className="text-center mt-8 text-sm text-gray-400">
             <Link
               href="/"
               className="font-medium text-green-600 hover:text-green-800 transition-colors">
