@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import ServiceWorkerRegister from "./services/ServiceWorkerRegister";
+import PWAInstallPrompt from "./components/pwa/PWAInstallPrompt";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -26,6 +27,7 @@ export default function RootLayout({
       <body className={`${poppins.className} antialiased`}>
         <ServiceWorkerRegister />
         {children}
+        <PWAInstallPrompt />
       </body>
     </html>
   );
