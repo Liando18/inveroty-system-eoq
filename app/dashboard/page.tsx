@@ -354,7 +354,7 @@ export default function DashboardPage() {
             <p className="text-sm text-gray-500 font-medium">{s.label}</p>
             <p
               className={`text-[11px] mt-1 font-medium ${s.up ? "text-green-600" : "text-amber-600"}`}>
-              {s.up ? "↑" : "↑"} {s.changeTxt}
+              ↑ {s.changeTxt}
             </p>
           </div>
         ))}
@@ -696,9 +696,7 @@ export default function DashboardPage() {
             </thead>
             <tbody className="divide-y divide-gray-50">
               {EOQ_TABLE.map((row, i) => (
-                <tr
-                  key={i}
-                  className="hover:bg-gray-50/60 transition-colors group">
+                <tr key={i} className="hover:bg-gray-50/60 transition-colors">
                   <td className="px-5 py-4">
                     <div className="flex items-center gap-2.5">
                       <div
