@@ -49,6 +49,13 @@ export default function Navbar() {
               {l}
             </a>
           ))}
+          <button
+            onClick={() =>
+              window.dispatchEvent(new Event("trigger-pwa-install"))
+            }
+            className="ml-2 px-4 py-2.5 rounded-xl bg-green-50 text-green-700 text-sm font-bold shadow-sm shadow-green-100 hover:bg-green-100 transition-all">
+            Install
+          </button>
           <Link
             href="/login"
             className="ml-2 px-5 py-2.5 rounded-xl bg-green-600 text-white text-sm font-bold shadow-md shadow-green-200 hover:bg-green-700 hover:-translate-y-px transition-all">
@@ -94,7 +101,15 @@ export default function Navbar() {
               {l}
             </a>
           ))}
-          <div className="pt-2">
+          <div className="pt-2 flex flex-col gap-2">
+            <button
+              onClick={() => {
+                setMobileMenu(false);
+                window.dispatchEvent(new Event("trigger-pwa-install"));
+              }}
+              className="block w-full text-center px-4 py-3 rounded-xl bg-green-50 text-green-700 border border-green-200 text-sm font-bold hover:bg-green-100 transition-all">
+              Install
+            </button>
             <Link
               href="/login"
               className="block w-full text-center px-4 py-3 rounded-xl bg-green-600 text-white text-sm font-bold hover:bg-green-700 transition-all">

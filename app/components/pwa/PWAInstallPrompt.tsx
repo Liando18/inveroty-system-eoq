@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 export default function PWAInstallPrompt() {
   const [isInstallable, setIsInstallable] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const deferredPromptRef = useRef<any>(null);
   const [isIOS, setIsIOS] = useState(false);
   const [showIOSPrompt, setShowIOSPrompt] = useState(false);
 
@@ -25,19 +26,17 @@ export default function PWAInstallPrompt() {
 
     if (isIOSDevice && isSafari) {
       setIsIOS(true);
-      // Wait a bit before showing to not overwhelm the user immediately
       const timer = setTimeout(() => setShowIOSPrompt(true), 2500);
       return () => clearTimeout(timer);
     }
 
     if (isAndroid || (!isIOSDevice && !isSafari)) {
-      // For Android and Desktop, we show the custom banner by default
-      // to encourage users to click it. When they do, we'll use the deferredPrompt.
       const timer = setTimeout(() => setIsInstallable(true), 2500);
 
       const handleBeforeInstallPrompt = (e: Event) => {
         e.preventDefault();
         setDeferredPrompt(e);
+        deferredPromptRef.current = e;
         setIsInstallable(true);
       };
 
@@ -53,6 +52,32 @@ export default function PWAInstallPrompt() {
     }
   }, []);
 
+  useEffect(() => {
+    const handleManualInstall = async () => {
+      // If opened from trigger event
+      if (isIOS) {
+        setShowIOSPrompt(true);
+      } else if (deferredPromptRef.current) {
+        deferredPromptRef.current.prompt();
+        const { outcome } = await deferredPromptRef.current.userChoice;
+        if (outcome === "accepted") {
+          setIsInstallable(false);
+        }
+        setDeferredPrompt(null);
+        deferredPromptRef.current = null;
+      } else {
+        alert(
+          "Untuk menginstall, silakan buka menu browser (titik tiga) lalu pilih 'Tambah ke Layar Utama' atau 'Add to Home Screen'.",
+        );
+      }
+    };
+
+    window.addEventListener("trigger-pwa-install", handleManualInstall);
+    return () => {
+      window.removeEventListener("trigger-pwa-install", handleManualInstall);
+    };
+  }, [isIOS]);
+
   const handleInstallClick = async () => {
     if (deferredPrompt) {
       deferredPrompt.prompt();
@@ -61,12 +86,17 @@ export default function PWAInstallPrompt() {
         setIsInstallable(false);
       }
       setDeferredPrompt(null);
+      deferredPromptRef.current = null;
     } else {
-      // Fallback if beforeinstallprompt didn't fire but we showed the banner
       alert(
         "Untuk menginstall, silakan buka menu browser (titik tiga) lalu pilih 'Tambah ke Layar Utama' atau 'Add to Home Screen'.",
       );
     }
+  };
+
+  const handleClose = () => {
+    setIsInstallable(false);
+    setShowIOSPrompt(false);
   };
 
   if (!isInstallable && !showIOSPrompt) return null;
@@ -100,9 +130,17 @@ export default function PWAInstallPrompt() {
           </div>
         </div>
 
-        {isIOS ? (
+        <div className="flex items-center gap-2">
+          {!isIOS && (
+            <button
+              onClick={handleInstallClick}
+              className="shrink-0 px-4 py-2 bg-green-600 text-white text-sm font-semibold rounded-lg hover:bg-green-700 transition-colors shadow-sm shadow-green-200">
+              Install
+            </button>
+          )}
+
           <button
-            onClick={() => setShowIOSPrompt(false)}
+            onClick={handleClose}
             className="shrink-0 p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-lg transition-colors"
             aria-label="Tutup">
             <svg
@@ -118,13 +156,7 @@ export default function PWAInstallPrompt() {
               />
             </svg>
           </button>
-        ) : (
-          <button
-            onClick={handleInstallClick}
-            className="shrink-0 px-4 py-2 bg-green-600 text-white text-sm font-semibold rounded-lg hover:bg-green-700 transition-colors shadow-sm shadow-green-200">
-            Install
-          </button>
-        )}
+        </div>
       </div>
 
       {isIOS && showIOSPrompt && (
