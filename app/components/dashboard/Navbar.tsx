@@ -67,26 +67,6 @@ export default function Navbar({ active, onToggleSidebar }: NavbarProps) {
         </div>
 
         <div className="flex items-center gap-2">
-          <div className="relative hidden md:block">
-            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
-              <svg
-                className="w-4 h-4"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round">
-                <circle cx="11" cy="11" r="8" />
-                <line x1="21" y1="21" x2="16.65" y2="16.65" />
-              </svg>
-            </div>
-            <input
-              placeholder="Cari produk…"
-              className="pl-9 pr-4 py-2 border border-gray-200 rounded-xl text-xs text-gray-700 bg-gray-50 outline-none focus:border-green-400 focus:ring-2 focus:ring-green-100 w-44 lg:w-52 transition-all"
-            />
-          </div>
-
           <div className="relative">
             <button
               onClick={() => setNotifOpen((o) => !o)}

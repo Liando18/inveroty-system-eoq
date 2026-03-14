@@ -7,6 +7,7 @@ import type { UserSession } from "@/app/model/user.model";
 import Sidebar, { NavId } from "@/app/components/dashboard/Sidebar";
 import Navbar from "@/app/components/dashboard/Navbar";
 import DashboardFooter from "@/app/components/dashboard/DashboardFooter";
+import NextTopLoader from "nextjs-toploader";
 
 const PATH_MAP: Record<string, NavId> = {
   "/dashboard": "dashboard",
@@ -45,6 +46,7 @@ export default function DashboardLayout({
   const [checked, setChecked] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [pageLoading, setPageLoading] = useState(false);
 
   const active: NavId = PATH_MAP[pathname] ?? "dashboard";
 
@@ -57,6 +59,12 @@ export default function DashboardLayout({
     setSession(s);
     setChecked(true);
   }, [router]);
+
+  useEffect(() => {
+    setPageLoading(true);
+    const t = setTimeout(() => setPageLoading(false), 400);
+    return () => clearTimeout(t);
+  }, [pathname]);
 
   function handleLogout() {
     logout();
@@ -89,6 +97,13 @@ export default function DashboardLayout({
 
   return (
     <div className="flex min-h-screen bg-slate-50">
+      <NextTopLoader
+        color="#16a34a"
+        height={3}
+        showSpinner={false}
+        shadow="0 0 10px #16a34a,0 0 5px #16a34a"
+      />
+
       {mobileOpen && (
         <div
           className="fixed inset-0 bg-black/50 z-40 lg:hidden"
@@ -123,7 +138,25 @@ export default function DashboardLayout({
 
       <div className="flex-1 flex flex-col min-w-0">
         <Navbar active={active} onToggleSidebar={handleToggle} />
-        <main className="flex-1 p-4 md:p-6 overflow-y-auto">{children}</main>
+        <main className="flex-1 p-4 md:p-6 overflow-y-auto relative">
+          {pageLoading && (
+            <div className="absolute inset-0 bg-slate-50/60 backdrop-blur-[1px] flex items-start justify-center pt-20 z-10">
+              <div className="flex flex-col items-center gap-3">
+                <div className="w-8 h-8 border-2 border-green-500 border-t-transparent rounded-full animate-spin" />
+                <p className="text-xs text-gray-400 font-medium">
+                  Memuat halaman...
+                </p>
+              </div>
+            </div>
+          )}
+          <div
+            style={{
+              opacity: pageLoading ? 0.4 : 1,
+              transition: "opacity 0.2s",
+            }}>
+            {children}
+          </div>
+        </main>
         <DashboardFooter />
       </div>
     </div>

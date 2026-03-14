@@ -4,7 +4,7 @@ export interface Stok {
   id: number;
   produk_id: number;
   stok: number;
-  minimun: number;
+  minimum: number;
   created_at: string;
 }
 

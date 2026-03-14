@@ -14,15 +14,6 @@ export default function DashboardFooter() {
         </span>{" "}
         · Sistem Manajemen Persediaan PWA
       </p>
-      <div className="flex gap-1.5">
-        {["EOQ v2.1", "ROP Real-time", "PWA Ready"].map((t) => (
-          <span
-            key={t}
-            className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-green-50 text-green-700 border border-green-100">
-            {t}
-          </span>
-        ))}
-      </div>
     </footer>
   );
 }
