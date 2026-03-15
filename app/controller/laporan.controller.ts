@@ -21,6 +21,7 @@ export interface LaporanBarangMasuk {
 export interface LaporanBarangMasukAggregated {
   periode: string;
   jumlah_barang: number;
+  jumlah_transaksi: number;
   total_transaksi: number;
 }
 
@@ -43,6 +44,7 @@ export interface LaporanBarangKeluar {
 export interface LaporanBarangKeluarAggregated {
   periode: string;
   jumlah_barang: number;
+  jumlah_transaksi: number;
   total_transaksi: number;
 }
 
@@ -113,13 +115,16 @@ export async function getLaporanBarangMasukBulanan(
 
   if (error) return { success: false, message: error.message };
 
-  const weekMap = new Map<number, { jumlah: number; total: number }>();
+  const weekMap = new Map<
+    number,
+    { jumlah: number; total: number; count: number }
+  >();
 
   (data || []).forEach((item: any) => {
     const date = new Date(item.tanggal);
     const weekNum = getWeekOfMonth(date);
 
-    const existing = weekMap.get(weekNum) || { jumlah: 0, total: 0 };
+    const existing = weekMap.get(weekNum) || { jumlah: 0, total: 0, count: 0 };
     const jumlahBarang = (item.barang_masuk_detail || []).reduce(
       (sum: number, d: any) => sum + (d.jumlah_beli || 0),
       0,
@@ -128,16 +133,18 @@ export async function getLaporanBarangMasukBulanan(
     weekMap.set(weekNum, {
       jumlah: existing.jumlah + jumlahBarang,
       total: existing.total + (item.total || 0),
+      count: existing.count + 1,
     });
   });
 
   const maxWeeks = getMaxWeeksInMonth(tahun, bulan);
   const formatted: LaporanBarangMasukAggregated[] = [];
   for (let i = 1; i <= maxWeeks; i++) {
-    const weekData = weekMap.get(i) || { jumlah: 0, total: 0 };
+    const weekData = weekMap.get(i) || { jumlah: 0, total: 0, count: 0 };
     formatted.push({
       periode: `Minggu ${i}`,
       jumlah_barang: weekData.jumlah,
+      jumlah_transaksi: weekData.count,
       total_transaksi: weekData.total,
     });
   }
@@ -175,7 +182,10 @@ export async function getLaporanBarangMasukTahunan(
 
   if (error) return { success: false, message: error.message };
 
-  const bulanMap = new Map<string, { jumlah: number; total: number }>();
+  const bulanMap = new Map<
+    string,
+    { jumlah: number; total: number; count: number }
+  >();
   const bulanLabels = [
     "Januari",
     "Februari",
@@ -196,7 +206,7 @@ export async function getLaporanBarangMasukTahunan(
     const bulanIdx = date.getMonth();
     const key = bulanLabels[bulanIdx];
 
-    const existing = bulanMap.get(key) || { jumlah: 0, total: 0 };
+    const existing = bulanMap.get(key) || { jumlah: 0, total: 0, count: 0 };
     const jumlahBarang = (item.barang_masuk_detail || []).reduce(
       (sum: number, d: any) => sum + (d.jumlah_beli || 0),
       0,
@@ -205,6 +215,7 @@ export async function getLaporanBarangMasukTahunan(
     bulanMap.set(key, {
       jumlah: existing.jumlah + jumlahBarang,
       total: existing.total + (item.total || 0),
+      count: existing.count + 1,
     });
   });
 
@@ -212,6 +223,7 @@ export async function getLaporanBarangMasukTahunan(
     (bulan) => ({
       periode: bulan,
       jumlah_barang: bulanMap.get(bulan)?.jumlah || 0,
+      jumlah_transaksi: bulanMap.get(bulan)?.count || 0,
       total_transaksi: bulanMap.get(bulan)?.total || 0,
     }),
   );
@@ -270,13 +282,16 @@ export async function getLaporanBarangKeluarBulanan(
 
   if (error) return { success: false, message: error.message };
 
-  const weekMap = new Map<number, { jumlah: number; total: number }>();
+  const weekMap = new Map<
+    number,
+    { jumlah: number; total: number; count: number }
+  >();
 
   (data || []).forEach((item: any) => {
     const date = new Date(item.tanggal);
     const weekNum = getWeekOfMonth(date);
 
-    const existing = weekMap.get(weekNum) || { jumlah: 0, total: 0 };
+    const existing = weekMap.get(weekNum) || { jumlah: 0, total: 0, count: 0 };
     const jumlahBarang = (item.barang_keluar_detail || []).reduce(
       (sum: number, d: any) => sum + (d.jumlah_jual || 0),
       0,
@@ -285,16 +300,18 @@ export async function getLaporanBarangKeluarBulanan(
     weekMap.set(weekNum, {
       jumlah: existing.jumlah + jumlahBarang,
       total: existing.total + (item.total || 0),
+      count: existing.count + 1,
     });
   });
 
   const maxWeeks = getMaxWeeksInMonth(tahun, bulan);
   const formatted: LaporanBarangKeluarAggregated[] = [];
   for (let i = 1; i <= maxWeeks; i++) {
-    const weekData = weekMap.get(i) || { jumlah: 0, total: 0 };
+    const weekData = weekMap.get(i) || { jumlah: 0, total: 0, count: 0 };
     formatted.push({
       periode: `Minggu ${i}`,
       jumlah_barang: weekData.jumlah,
+      jumlah_transaksi: weekData.count,
       total_transaksi: weekData.total,
     });
   }
@@ -317,7 +334,10 @@ export async function getLaporanBarangKeluarTahunan(
 
   if (error) return { success: false, message: error.message };
 
-  const bulanMap = new Map<string, { jumlah: number; total: number }>();
+  const bulanMap = new Map<
+    string,
+    { jumlah: number; total: number; count: number }
+  >();
   const bulanLabels = [
     "Januari",
     "Februari",
@@ -338,7 +358,7 @@ export async function getLaporanBarangKeluarTahunan(
     const bulanIdx = date.getMonth();
     const key = bulanLabels[bulanIdx];
 
-    const existing = bulanMap.get(key) || { jumlah: 0, total: 0 };
+    const existing = bulanMap.get(key) || { jumlah: 0, total: 0, count: 0 };
     const jumlahBarang = (item.barang_keluar_detail || []).reduce(
       (sum: number, d: any) => sum + (d.jumlah_jual || 0),
       0,
@@ -347,6 +367,7 @@ export async function getLaporanBarangKeluarTahunan(
     bulanMap.set(key, {
       jumlah: existing.jumlah + jumlahBarang,
       total: existing.total + (item.total || 0),
+      count: existing.count + 1,
     });
   });
 
@@ -354,6 +375,7 @@ export async function getLaporanBarangKeluarTahunan(
     (bulan) => ({
       periode: bulan,
       jumlah_barang: bulanMap.get(bulan)?.jumlah || 0,
+      jumlah_transaksi: bulanMap.get(bulan)?.count || 0,
       total_transaksi: bulanMap.get(bulan)?.total || 0,
     }),
   );

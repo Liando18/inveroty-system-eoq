@@ -132,6 +132,11 @@ export default function LaporanBarangMasukPage() {
       ? dataHarian.reduce((sum, item) => sum + item.total, 0)
       : dataAggregated.reduce((sum, item) => sum + item.total_transaksi, 0);
 
+  const totalTransaksi =
+    activeTab === "harian"
+      ? dataHarian.length
+      : dataAggregated.reduce((sum, item) => sum + item.jumlah_transaksi, 0);
+
   const totalBarang =
     activeTab === "harian"
       ? dataHarian.reduce(
@@ -422,7 +427,8 @@ export default function LaporanBarangMasukPage() {
                     "#",
                     activeTab === "bulanan" ? "Minggu Ke" : "Bulan",
                     "Jumlah Barang",
-                    "Total Transaksi",
+                    "Jumlah Transaksi",
+                    "Total Uang Masuk",
                   ].map((h) => (
                     <th
                       key={h}
@@ -445,6 +451,9 @@ export default function LaporanBarangMasukPage() {
                       {item.jumlah_barang.toLocaleString("id-ID")}
                     </td>
                     <td className="px-5 py-4 text-sm font-bold text-green-700 text-center">
+                      {item.jumlah_transaksi.toLocaleString("id-ID")}
+                    </td>
+                    <td className="px-5 py-4 text-sm font-bold text-green-700 text-center">
                       Rp {item.total_transaksi.toLocaleString("id-ID")}
                     </td>
                   </tr>
@@ -460,6 +469,11 @@ export default function LaporanBarangMasukPage() {
                   <td className="px-5 py-4 text-center">
                     <span className="text-sm font-bold text-blue-700">
                       {totalBarang.toLocaleString("id-ID")}
+                    </span>
+                  </td>
+                  <td className="px-5 py-4 text-center">
+                    <span className="text-sm font-bold text-green-700">
+                      {totalTransaksi.toLocaleString("id-ID")}
                     </span>
                   </td>
                   <td className="px-5 py-4 text-center">
