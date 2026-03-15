@@ -113,40 +113,51 @@ export async function getLaporanBarangMasukBulanan(
 
   if (error) return { success: false, message: error.message };
 
-  const weekMap = new Map<string, { jumlah: number; total: number }>();
+  const weekMap = new Map<number, { jumlah: number; total: number }>();
 
   (data || []).forEach((item: any) => {
     const date = new Date(item.tanggal);
-    const weekNum = getWeekNumber(date);
-    const key = `Minggu ${weekNum}`;
+    const weekNum = getWeekOfMonth(date);
 
-    const existing = weekMap.get(key) || { jumlah: 0, total: 0 };
+    const existing = weekMap.get(weekNum) || { jumlah: 0, total: 0 };
     const jumlahBarang = (item.barang_masuk_detail || []).reduce(
       (sum: number, d: any) => sum + (d.jumlah_beli || 0),
       0,
     );
 
-    weekMap.set(key, {
+    weekMap.set(weekNum, {
       jumlah: existing.jumlah + jumlahBarang,
       total: existing.total + (item.total || 0),
     });
   });
 
-  const formatted: LaporanBarangMasukAggregated[] = Array.from(
-    weekMap.entries(),
-  ).map(([periode, data]) => ({
-    periode,
-    jumlah_barang: data.jumlah,
-    total_transaksi: data.total,
-  }));
+  const maxWeeks = getMaxWeeksInMonth(tahun, bulan);
+  const formatted: LaporanBarangMasukAggregated[] = [];
+  for (let i = 1; i <= maxWeeks; i++) {
+    const weekData = weekMap.get(i) || { jumlah: 0, total: 0 };
+    formatted.push({
+      periode: `Minggu ${i}`,
+      jumlah_barang: weekData.jumlah,
+      total_transaksi: weekData.total,
+    });
+  }
 
   return { success: true, data: formatted };
 }
 
-function getWeekNumber(date: Date): number {
-  const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
-  const pastDaysOfYear = (date.getTime() - firstDayOfYear.getTime()) / 86400000;
-  return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+function getMaxWeeksInMonth(year: number, month: number): number {
+  const firstDay = new Date(year, month - 1, 1);
+  const lastDay = new Date(year, month - 1 + 1, 0);
+  const daysInMonth = lastDay.getDate();
+  const firstDayOfWeek = firstDay.getDay();
+  return Math.ceil((daysInMonth + firstDayOfWeek) / 7);
+}
+
+function getWeekOfMonth(date: Date): number {
+  const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+  const dayOfMonth = date.getDate();
+  const dayOfWeek = firstDayOfMonth.getDay();
+  return Math.ceil((dayOfMonth + dayOfWeek) / 7);
 }
 
 export async function getLaporanBarangMasukTahunan(
@@ -259,32 +270,34 @@ export async function getLaporanBarangKeluarBulanan(
 
   if (error) return { success: false, message: error.message };
 
-  const weekMap = new Map<string, { jumlah: number; total: number }>();
+  const weekMap = new Map<number, { jumlah: number; total: number }>();
 
   (data || []).forEach((item: any) => {
     const date = new Date(item.tanggal);
-    const weekNum = getWeekNumber(date);
-    const key = `Minggu ${weekNum}`;
+    const weekNum = getWeekOfMonth(date);
 
-    const existing = weekMap.get(key) || { jumlah: 0, total: 0 };
+    const existing = weekMap.get(weekNum) || { jumlah: 0, total: 0 };
     const jumlahBarang = (item.barang_keluar_detail || []).reduce(
       (sum: number, d: any) => sum + (d.jumlah_jual || 0),
       0,
     );
 
-    weekMap.set(key, {
+    weekMap.set(weekNum, {
       jumlah: existing.jumlah + jumlahBarang,
       total: existing.total + (item.total || 0),
     });
   });
 
-  const formatted: LaporanBarangKeluarAggregated[] = Array.from(
-    weekMap.entries(),
-  ).map(([periode, data]) => ({
-    periode,
-    jumlah_barang: data.jumlah,
-    total_transaksi: data.total,
-  }));
+  const maxWeeks = getMaxWeeksInMonth(tahun, bulan);
+  const formatted: LaporanBarangKeluarAggregated[] = [];
+  for (let i = 1; i <= maxWeeks; i++) {
+    const weekData = weekMap.get(i) || { jumlah: 0, total: 0 };
+    formatted.push({
+      periode: `Minggu ${i}`,
+      jumlah_barang: weekData.jumlah,
+      total_transaksi: weekData.total,
+    });
+  }
 
   return { success: true, data: formatted };
 }
