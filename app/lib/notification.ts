@@ -10,7 +10,6 @@ export interface NotificationPayload {
   data?: Record<string, unknown>;
 }
 
-
 export async function registerServiceWorker(): Promise<ServiceWorkerRegistration | null> {
   if (typeof window === "undefined" || !("serviceWorker" in navigator)) {
     console.log("Service Worker not supported");
@@ -24,7 +23,6 @@ export async function registerServiceWorker(): Promise<ServiceWorkerRegistration
 
     console.log("Service Worker registered:", registration);
 
-    
     registration.addEventListener("updatefound", () => {
       const newWorker = registration.installing;
       if (newWorker) {
@@ -33,7 +31,6 @@ export async function registerServiceWorker(): Promise<ServiceWorkerRegistration
             newWorker.state === "installed" &&
             navigator.serviceWorker.controller
           ) {
-            
             newWorker.postMessage({ type: "SKIP_WAITING" });
           }
         });
@@ -46,7 +43,6 @@ export async function registerServiceWorker(): Promise<ServiceWorkerRegistration
     return null;
   }
 }
-
 
 export async function requestNotificationPermission(): Promise<NotificationPermission> {
   if (typeof window === "undefined" || !("Notification" in window)) {
@@ -66,14 +62,12 @@ export async function requestNotificationPermission(): Promise<NotificationPermi
   return Notification.permission;
 }
 
-
 export function areNotificationsAllowed(): boolean {
   if (typeof window === "undefined" || !("Notification" in window)) {
     return false;
   }
   return Notification.permission === "granted";
 }
-
 
 export async function showNotification(
   payload: NotificationPayload,
@@ -94,14 +88,12 @@ export async function showNotification(
   }
 
   try {
-    
     const notification = new Notification(payload.title, {
       body: payload.body,
       icon: payload.icon || "/icon.png",
       badge: "/icon.png",
       tag: payload.tag || "inventory-notification",
       data: payload.data,
-      vibrate: [200, 100, 200],
     });
 
     notification.onclick = () => {
@@ -118,7 +110,6 @@ export async function showNotification(
   }
 }
 
-
 export async function checkAndNotifyLowStock(): Promise<void> {
   try {
     const { data: allStok, error } = await supabase
@@ -130,13 +121,12 @@ export async function checkAndNotifyLowStock(): Promise<void> {
       return;
     }
 
-    
     const lowStockItems = (allStok || []).filter(
       (item: any) => item.stok <= item.minimum,
     );
 
     if (lowStockItems && lowStockItems.length > 0) {
-      const item = lowStockItems[0]; 
+      const item = lowStockItems[0];
       const produkName = (item as any).produk?.nama || "Produk";
 
       await showNotification({
@@ -150,7 +140,6 @@ export async function checkAndNotifyLowStock(): Promise<void> {
     console.error("Error in checkAndNotifyLowStock:", error);
   }
 }
-
 
 export function subscribeToStockChanges(
   onLowStock: (item: any) => void,
@@ -166,9 +155,8 @@ export function subscribeToStockChanges(
       },
       async (payload) => {
         const newStok = payload.new as any;
-        
+
         if (newStok.stok <= newStok.minimum) {
-          
           const { data: produk } = await supabase
             .from("produk")
             .select("nama")
@@ -188,7 +176,6 @@ export function subscribeToStockChanges(
     )
     .subscribe();
 
-  
   return () => {
     supabase.removeChannel(channel);
   };
