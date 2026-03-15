@@ -8,6 +8,7 @@ import Sidebar, { NavId } from "@/app/components/dashboard/Sidebar";
 import Navbar from "@/app/components/dashboard/Navbar";
 import DashboardFooter from "@/app/components/dashboard/DashboardFooter";
 import NextTopLoader from "nextjs-toploader";
+import NotificationProvider from "@/app/components/dashboard/NotificationProvider";
 
 const PATH_MAP: Record<string, NavId> = {
   "/dashboard": "dashboard",
@@ -154,7 +155,7 @@ export default function DashboardLayout({
               opacity: pageLoading ? 0.4 : 1,
               transition: "opacity 0.2s",
             }}>
-            {children}
+            <NotificationProvider>{children}</NotificationProvider>
           </div>
         </main>
         <DashboardFooter />

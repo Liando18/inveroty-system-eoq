@@ -63,11 +63,11 @@ export async function POST(req: NextRequest) {
 
     await sendEmail({
       to: user.email,
-      subject: "Reset Password - 4Yos Veterinary Care",
+      subject: "Reset Password - 4Yos Veterinary Care Care",
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 480px; margin: 0 auto;">
           <div style="background: #16a34a; padding: 24px; border-radius: 12px 12px 0 0;">
-            <h2 style="color: white; margin: 0; font-size: 18px;">🐾 4Yos Veterinary Care</h2>
+            <h2 style="color: white; margin: 0; font-size: 18px;">🐾 4Yos Veterinary Care Care</h2>
           </div>
           <div style="background: #f9fafb; padding: 28px; border-radius: 0 0 12px 12px; border: 1px solid #e5e7eb;">
             <p style="color: #111827; font-size: 15px; margin-top: 0;">Halo, <strong>${user.nama}</strong></p>
@@ -80,7 +80,7 @@ export async function POST(req: NextRequest) {
             </div>
             <p style="color: #9ca3af; font-size: 12px;">Link ini berlaku selama <strong>1 jam</strong>. Jika Anda tidak meminta reset password, abaikan email ini.</p>
             <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 20px 0;" />
-            <p style="color: #9ca3af; font-size: 11px; margin: 0;">© 2025 4Yos Veterinary Care · Sistem Manajemen Persediaan</p>
+            <p style="color: #9ca3af; font-size: 11px; margin: 0;">© 2025 4Yos Veterinary Care Care · Sistem Manajemen Persediaan</p>
           </div>
         </div>
       `,

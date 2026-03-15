@@ -11,7 +11,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "4Yos Veterinary Care",
+  title: "4Yos Veterinary Care Care",
   description: "Sistem Manajemen Persediaan PWA dengan EOQ dan ROP",
   manifest: "/manifest.webmanifest",
   themeColor: "#11df86",

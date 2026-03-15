@@ -47,7 +47,7 @@ export default function LoginForm() {
             </svg>
           </div>
           <p className="font-bold text-green-900 text-sm">
-            4Yos Veterinary Care
+            4Yos Veterinary Care Care
           </p>
         </div>
         <Link
@@ -77,7 +77,7 @@ export default function LoginForm() {
               Selamat Datang Kembali
             </h2>
             <p className="text-sm text-gray-500 mt-1.5 leading-relaxed">
-              Masuk untuk mengelola persediaan 4Yos Veterinary Care
+              Masuk untuk mengelola persediaan 4Yos Veterinary Care Care
             </p>
           </div>
 

@@ -378,7 +378,7 @@ export default function DashboardPage() {
         <div>
           <h1 className="text-xl font-bold text-gray-900">Selamat Datang 👋</h1>
           <p className="text-sm text-gray-500 mt-0.5">
-            Ringkasan inventori 4Yos Veterinary Care · {formatDate()}
+            Ringkasan inventori 4Yos Veterinary Care Care · {formatDate()}
           </p>
         </div>
       </div>

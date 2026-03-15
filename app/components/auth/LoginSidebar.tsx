@@ -29,7 +29,9 @@ export default function LoginSidebar() {
           </svg>
         </div>
         <div>
-          <p className="font-bold text-white text-sm">4Yos Veterinary Care</p>
+          <p className="font-bold text-white text-sm">
+            4Yos Veterinary Care Care
+          </p>
           <p className="text-[10px] text-green-400/60 uppercase tracking-widest">
             Inventory System
           </p>
@@ -88,7 +90,7 @@ export default function LoginSidebar() {
       </div>
 
       <p className="relative z-10 text-xs text-white/20">
-        © {formatTanggal()} 4Yos Veterinary Care. All rights reserved.
+        © {formatTanggal()} 4Yos Veterinary Care Care. All rights reserved.
       </p>
     </div>
   );

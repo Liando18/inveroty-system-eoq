@@ -66,7 +66,7 @@ export default function EditBarangMasukPage({
         setSupplierId(resMasuk.data.supplier_id);
         setKode(resMasuk.data.kode);
         setTanggal(new Date(resMasuk.data.tanggal).toISOString().split("T")[0]);
-        // load old details
+        
         const mappedDet = resMasuk.data.barang_masuk_detail.map((d: any) => ({
           produk_id: d.produk_id,
           harga_beli: d.harga_beli,

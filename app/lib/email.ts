@@ -22,7 +22,7 @@ export async function sendEmail({
 }) {
   try {
     const info = await transporter.sendMail({
-      from: `"4Yos Veterinary Care" <${process.env.SMTP_EMAIL}>`,
+      from: `"4Yos Veterinary Care Care" <${process.env.SMTP_EMAIL}>`,
       to,
       subject,
       html,

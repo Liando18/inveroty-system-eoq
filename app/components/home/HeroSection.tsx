@@ -27,7 +27,7 @@ export default function HeroSection() {
           </h1>
 
           <p className="text-base text-gray-500 leading-relaxed max-w-lg mb-8">
-            4Yos Veterinary Care hadir memberikan perawatan terbaik —
+            4Yos Veterinary Care Care hadir memberikan perawatan terbaik —
             pemeriksaan, pengobatan, rawat inap, hingga pet shop lengkap di
             Padang, Sumatera Barat.
           </p>
@@ -76,7 +76,7 @@ export default function HeroSection() {
               </div>
               <div className="min-w-0">
                 <p className="font-bold text-white text-sm sm:text-base truncate">
-                  4Yos Veterinary Care
+                  4Yos Veterinary Care Care
                 </p>
                 <p className="text-white/60 text-xs mt-0.5">
                   Jl. Durian Tarung No.10, Padang
@@ -133,9 +133,7 @@ export default function HeroSection() {
           <div className="absolute -top-3 -right-3 bg-green-600 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-lg">
             Terpercaya di Padang ⭐
           </div>
-          {/* <div className="absolute -bottom-3 -left-3 bg-white border border-gray-200 text-gray-800 text-xs font-bold px-4 py-2 rounded-xl shadow-lg">
-            📞 +62 822-8631-6881
-          </div> */}
+          {}
         </div>
       </div>
     </section>

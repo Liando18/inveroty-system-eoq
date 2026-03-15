@@ -468,7 +468,7 @@ export default function EditAnalisisPage({
                     color: "#374151",
                     fontFamily: "monospace",
                   }}>
-                  Q* = √ ( 2 × D × S / H )
+                  EOQ = √ ( 2 × D × S / H )
                 </p>
               </div>
               <div

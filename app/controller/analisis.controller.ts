@@ -80,12 +80,6 @@ export async function getPermintaanTahun(
   return data.reduce((sum: number, d: any) => sum + (d.jumlah_jual || 0), 0);
 }
 
-/**
- * Menghitung rata-rata permintaan harian berdasarkan data transaksi aktual.
- * Mengambil semua tanggal unik yang ada transaksi di tahun tsb,
- * lalu total permintaan dibagi jumlah hari aktif (bukan 365).
- * Hasilnya dibulatkan 2 desimal agar tidak selalu 0 untuk produk slow-moving.
- */
 export async function getPermintaanHarian(
   produk_id: number,
   tahun: number,
@@ -107,12 +101,12 @@ export async function getPermintaanHarian(
     0,
   );
 
-  // Hitung jumlah hari unik yang ada transaksi
+  
   const hariUnik = new Set(data.map((d: any) => d.barang_keluar?.tanggal)).size;
 
   if (hariUnik === 0) return 0;
 
-  // Rata-rata per hari aktif, dibulatkan 2 desimal
+  
   return Math.round((totalJual / hariUnik) * 100) / 100;
 }
 

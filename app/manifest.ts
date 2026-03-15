@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "4Yos Veterinary Care",
+    name: "4Yos Veterinary Care Care",
     short_name: "4YosApp",
     start_url: "/",
     display: "standalone",

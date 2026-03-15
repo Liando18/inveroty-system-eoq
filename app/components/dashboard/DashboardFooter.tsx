@@ -10,7 +10,7 @@ export default function DashboardFooter() {
       <p className="text-[11px] text-gray-400">
         © {formatTanggal()}{" "}
         <span className="font-semibold text-green-600">
-          4Yos Veterinary Care
+          4Yos Veterinary Care Care
         </span>{" "}
         · Sistem Manajemen Persediaan PWA
       </p>

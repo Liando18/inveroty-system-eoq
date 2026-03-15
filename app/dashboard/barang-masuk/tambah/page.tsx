@@ -8,6 +8,7 @@ import { getAllSuppliers } from "@/app/controller/supplier.controller";
 import { getAllProducts } from "@/app/controller/produk.controller";
 import { getAllStok } from "@/app/controller/stok.controller";
 import { getSession } from "@/app/controller/auth.controller";
+import { checkLowStockAndNotify } from "@/app/lib/notification-client";
 import type { Supplier } from "@/app/model/supplier.model";
 import type { ProdukWithKategori } from "@/app/model/produk.model";
 import type { Stok } from "@/app/model/stok.model";
@@ -117,6 +118,9 @@ export default function TambahBarangMasukPage() {
       return;
     }
 
+    // Check and notify low stock after transaction
+    await checkLowStockAndNotify();
+
     router.push("/dashboard/barang-masuk");
   }
 
@@ -150,7 +154,7 @@ export default function TambahBarangMasukPage() {
       </div>
 
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-6">
-        {/* Info Transaksi */}
+        {}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
           <div>
             <label className="block text-xs font-semibold text-gray-600 mb-2">
@@ -193,7 +197,7 @@ export default function TambahBarangMasukPage() {
 
         <hr className="border-gray-100" />
 
-        {/* List Produk */}
+        {}
         <div>
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-base font-bold text-gray-800">
@@ -230,7 +234,7 @@ export default function TambahBarangMasukPage() {
                 <div
                   key={idx}
                   className="flex flex-col gap-4 bg-gray-50 p-4 rounded-xl border border-gray-100">
-                  {/* Bagian Atas: Pilih Produk + Info */}
+                  {}
                   <div className="flex flex-col sm:flex-row gap-4">
                     <div className="w-full sm:w-1/2">
                       <label className="block text-xs font-semibold text-gray-500 mb-1.5">
@@ -282,7 +286,7 @@ export default function TambahBarangMasukPage() {
                     )}
                   </div>
 
-                  {/* Bagian Bawah: Harga Beli, Qty, Subtotal */}
+                  {}
                   <div className="grid grid-cols-1 sm:grid-cols-12 gap-4 items-end">
                     <div className="sm:col-span-4">
                       <label className="block text-xs font-semibold text-gray-500 mb-1.5">
@@ -355,7 +359,7 @@ export default function TambahBarangMasukPage() {
 
         <hr className="border-gray-100" />
 
-        {/* Kesimpulan */}
+        {}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="w-full sm:w-auto bg-green-50 px-5 py-3 rounded-xl border border-green-100 text-center sm:text-left">
             <p className="text-xs font-bold text-green-700 uppercase tracking-wide">

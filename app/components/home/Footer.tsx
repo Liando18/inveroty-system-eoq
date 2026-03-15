@@ -18,7 +18,7 @@ export default function Footer() {
               </div>
               <div>
                 <p className="font-bold text-white text-sm">
-                  4Yos Veterinary Care
+                  4Yos Veterinary Care Care
                 </p>
                 <p className="text-[10px] text-white/30 uppercase tracking-widest">
                   Klinik Kesehatan Hewan
@@ -61,7 +61,7 @@ export default function Footer() {
         </div>
         <div className="pt-6 flex flex-col sm:flex-row justify-between items-center gap-2">
           <p className="text-xs text-white/20">
-            © {formatTanggal()} 4Yos Veterinary Care. All rights reserved.
+            © {formatTanggal()} 4Yos Veterinary Care Care. All rights reserved.
           </p>
           <p className="text-xs text-white/20">PWA · EOQ & ROP System</p>
         </div>

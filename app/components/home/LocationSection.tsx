@@ -45,7 +45,7 @@ export default function LocationSection() {
             📍
           </div>
           <div className="text-center">
-            <p className="font-bold text-gray-900">4Yos Veterinary Care</p>
+            <p className="font-bold text-gray-900">4Yos Veterinary Care Care</p>
             <p className="text-sm text-gray-500 mt-1">
               Jl. Durian Tarung No.10, Kec. Kuranji, Padang
             </p>

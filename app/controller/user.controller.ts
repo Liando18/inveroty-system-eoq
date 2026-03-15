@@ -15,12 +15,47 @@ export async function getAllUsers(): Promise<UserResult<User[]>> {
   return { success: true, data: data ?? [] };
 }
 
+export async function getOwner(): Promise<UserResult<User | null>> {
+  const { data, error } = await supabase
+    .from("user")
+    .select("*")
+    .eq("role", "owner")
+    .limit(1)
+    .single();
+
+  if (error && error.code !== "PGRST116") {
+    return { success: false, message: error.message };
+  }
+  return { success: true, data: data || null };
+}
+
+export async function checkOwnerExists(): Promise<boolean> {
+  const { data, error } = await supabase
+    .from("user")
+    .select("id")
+    .eq("role", "owner")
+    .limit(1);
+
+  if (error) return false;
+  return (data || []).length > 0;
+}
+
 export async function createUser(payload: {
   nama: string;
   email: string;
   password: string;
   role: UserRole;
 }): Promise<UserResult<null>> {
+  if (payload.role === "owner") {
+    const ownerExists = await checkOwnerExists();
+    if (ownerExists) {
+      return {
+        success: false,
+        message: "Owner sudah ada. Tidak dapat menambah owner lagi.",
+      };
+    }
+  }
+
   const { error } = await supabase.from("user").insert(payload);
   if (error) return { success: false, message: error.message };
   return { success: true, data: null };

@@ -261,7 +261,7 @@ export default function Sidebar({
         {(!collapsed || mobile) && (
           <div className="overflow-hidden">
             <p className="font-bold text-white text-sm leading-tight whitespace-nowrap">
-              4Yos Veterinary
+              4Yos Veterinary Care
             </p>
             <p className="text-[10px] text-green-400/70 uppercase tracking-widest">
               Inventory System

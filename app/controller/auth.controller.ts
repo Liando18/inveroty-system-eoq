@@ -56,8 +56,7 @@ export function getSession(): UserSession | null {
     try {
       return JSON.parse(fromLocal) as UserSession;
     } catch {
-      /* skip */
-    }
+          }
   }
 
   const fromSession = sessionStorage.getItem(SESSION_KEY);
@@ -65,8 +64,7 @@ export function getSession(): UserSession | null {
     try {
       return JSON.parse(fromSession) as UserSession;
     } catch {
-      /* skip */
-    }
+          }
   }
 
   return null;

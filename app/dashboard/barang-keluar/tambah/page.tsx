@@ -7,6 +7,7 @@ import { createBarangKeluarTransaction } from "@/app/controller/barang-keluar.co
 import { getAllProducts } from "@/app/controller/produk.controller";
 import { getAllStok } from "@/app/controller/stok.controller";
 import { getSession } from "@/app/controller/auth.controller";
+import { checkLowStockAndNotify } from "@/app/lib/notification-client";
 import type { ProdukWithKategori } from "@/app/model/produk.model";
 import type { Stok } from "@/app/model/stok.model";
 
@@ -119,6 +120,9 @@ export default function TambahBarangKeluarPage() {
       setSaving(false);
       return;
     }
+
+    // Check and notify low stock after transaction
+    await checkLowStockAndNotify();
 
     router.push("/dashboard/barang-keluar");
   }

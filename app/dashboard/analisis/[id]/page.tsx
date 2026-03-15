@@ -10,6 +10,11 @@ import {
 import type { AnalisisWithProduk } from "@/app/model/analisis.model";
 import { use } from "react";
 
+const NAMA_TOKO = "4Yos Veterinary Care";
+const ALAMAT_TOKO =
+  "Jl. Durian Tarung No.10, Ps. Ambacang, Kec. Kuranji, Kota Padang, Sumatera Barat 25175";
+const KONTAK_TOKO = "Telp: +62 822-8631-6881";
+
 export default function DetailAnalisisPage({
   params,
 }: {
@@ -29,6 +34,135 @@ export default function DetailAnalisisPage({
     }
     init();
   }, [paramId]);
+
+  function handlePrintAnalisis() {
+    if (!data) return;
+
+    const printWindow = window.open("", "_blank");
+    if (!printWindow) return;
+
+    const today = new Date().toLocaleDateString("id-ID", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Laporan Analisis - ${data.produk?.nama}</title>
+          <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { font-family: Arial, sans-serif; padding: 15px; }
+            .header { text-align: center; margin-bottom: 15px; }
+            .header h1 { font-size: 20px; font-weight: bold; margin-bottom: 3px; }
+            .header p { font-size: 11px; color: #666; }
+            .divider { border-bottom: 1px solid #000; margin: 10px 0; }
+            .title { text-align: center; margin-bottom: 15px; font-size: 14px; font-weight: bold; }
+            .info { display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 11px; }
+            .info-left { text-align: left; }
+            .info-right { text-align: right; }
+            table { width: 100%; border-collapse: collapse; font-size: 10px; margin-bottom: 15px; }
+            th, td { border: 1px solid #ddd; padding: 5px; text-align: left; }
+            th { background: #f5f5f5; }
+            .text-right { text-align: right; }
+            .text-center { text-align: center; }
+            .result-box { padding: 10px; margin-bottom: 15px; }
+            .result-box h3 { font-size: 12px; margin-bottom: 5px; }
+            .result-box p { font-size: 10px; }
+            .eoq-box { background: #dcfce7; border: 1px solid #86efac; }
+            .rop-box { background: #fef3c7; border: 1px solid #fcd34d; }
+            .footer { margin-top: 20px; text-align: center; font-size: 10px; color: #666; }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <h1>${NAMA_TOKO}</h1>
+            <p>${ALAMAT_TOKO} | ${KONTAK_TOKO}</p>
+          </div>
+          <div class="divider"></div>
+          <div class="title">LAPORAN HASIL ANALISIS</div>
+          <div class="info">
+            <div class="info-left">
+              <p><strong>Produk:</strong> ${data.produk?.nama}</p>
+              <p><strong>Periode:</strong> ${data.periode}</p>
+            </div>
+            <div class="info-right">
+              <p><strong>Tanggal Cetak:</strong> ${today}</p>
+            </div>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th class="text-center">#</th>
+                <th>Parameter</th>
+                <th class="text-right">Nilai</th>
+                <th>Satuan</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-center">1</td>
+                <td>Permintaan per Tahun</td>
+                <td class="text-right">${data.permintaan_pertahun.toLocaleString("id-ID")}</td>
+                <td>unit</td>
+              </tr>
+              <tr>
+                <td class="text-center">2</td>
+                <td>Permintaan per Hari</td>
+                <td class="text-right">${data.permintaan_perhari.toLocaleString("id-ID")}</td>
+                <td>unit</td>
+              </tr>
+              <tr>
+                <td class="text-center">3</td>
+                <td>Safety Stock</td>
+                <td class="text-right">${data.stok_cadangan.toLocaleString("id-ID")}</td>
+                <td>unit</td>
+              </tr>
+              <tr>
+                <td class="text-center">4</td>
+                <td>Biaya Pemesanan</td>
+                <td class="text-right">${data.biaya_pemesanan.toLocaleString("id-ID")}</td>
+                <td>Rp</td>
+              </tr>
+              <tr>
+                <td class="text-center">5</td>
+                <td>Biaya Penyimpanan</td>
+                <td class="text-right">${data.biaya_penyimpanan.toLocaleString("id-ID")}</td>
+                <td>Rp</td>
+              </tr>
+              <tr>
+                <td class="text-center">6</td>
+                <td>Waktu Tunggu</td>
+                <td class="text-right">${data.lama_pemesanan}</td>
+                <td>hari</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="result-box eoq-box">
+            <h3>EOQ (Economic Order Quantity)</h3>
+            <p><strong>Hasil: ${data.eoq.toLocaleString("id-ID")} unit</strong></p>
+            <p>Rumus: EOQ = √ (2 × D × S / H) = √(${data.permintaan_pertahun} × ${data.biaya_pemesanan} / ${data.biaya_penyimpanan})</p>
+          </div>
+          <div class="result-box rop-box">
+            <h3>ROP (Reorder Point)</h3>
+            <p><strong>Hasil: ${data.rop.toLocaleString("id-ID")} unit</strong></p>
+            <p>Rumus: ROP = (d × L) + SS = (${data.permintaan_perhari} × ${data.lama_pemesanan}) + ${data.stok_cadangan}</p>
+          </div>
+          <div class="footer">
+            <p>Dicetak pada ${today}</p>
+            <p>${NAMA_TOKO} - Sistem Inventory</p>
+          </div>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
+    printWindow.focus();
+    setTimeout(() => {
+      printWindow.print();
+    }, 250);
+  }
 
   if (loading) {
     return (
@@ -130,7 +264,7 @@ export default function DetailAnalisisPage({
           <div className="px-6 py-6 space-y-4">
             <div className="bg-gray-50 rounded-xl px-4 py-3 text-center border border-gray-100">
               <p className="text-sm font-bold text-gray-600 font-mono">
-                Q* = √ ( 2 × D × S / H )
+                EOQ = √ ( 2 × D × S / H )
               </p>
             </div>
             <div className="bg-gray-50 rounded-xl border border-gray-100">
@@ -345,7 +479,7 @@ export default function DetailAnalisisPage({
             Ubah Parameter
           </Link>
           <button
-            onClick={() => window.print()}
+            onClick={() => handlePrintAnalisis()}
             className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition">
             Cetak Hasil
           </button>
