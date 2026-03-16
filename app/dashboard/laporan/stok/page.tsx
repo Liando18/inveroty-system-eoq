@@ -7,7 +7,7 @@ import {
 } from "@/app/controller/laporan.controller";
 import { getOwner } from "@/app/controller/user.controller";
 
-const NAMA_TOKO = "4Yos Veterinary Care Care";
+const NAMA_TOKO = "4Yos Veterinary Care";
 const ALAMAT_TOKO =
   "Jl. Durian Tarung No.10, Ps. Ambacang, Kec. Kuranji, Kota Padang, Sumatera Barat 25175";
 
